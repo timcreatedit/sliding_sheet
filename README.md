@@ -1,5 +1,8 @@
 # Sliding Sheet
 
+[![pub package](https://img.shields.io/pub/v/sliding_sheet.svg)](https://pub.dartlang.org/packages/sliding_sheet)
+[![GitHub Stars](https://img.shields.io/github/stars/bxqm/sliding_sheet.svg?logo=github)](https://github.com/bxqm/sliding_sheet)
+
 A widget that can be dragged and scrolled in a single gesture and snapped to a list of extents.
 
 <a href="https://github.com/bxqm/sliding_sheet/blob/master/example/lib/main.dart">
@@ -13,7 +16,7 @@ Click [here](https://github.com/bxqm/sliding_sheet/blob/master/example/lib/main.
 Add it to your `pubspec.yaml` file:
 ```yaml
 dependencies:
-  sliding_sheet: ^0.5.0
+  sliding_sheet: ^0.5.1
 ```
 Install packages from the command line
 ```

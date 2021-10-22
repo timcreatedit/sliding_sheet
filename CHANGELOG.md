@@ -1,3 +1,6 @@
+## 0.5.1
+* **Added** `customBuilder` for infinite lists
+
 ## 0.5.0
 * **Added** NNBD support
 * **Fixed** #70
