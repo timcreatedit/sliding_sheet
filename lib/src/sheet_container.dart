@@ -60,11 +60,13 @@ class SheetContainer extends StatelessWidget {
               : const []),
     );
 
-    final child = ClipRRect(
-      borderRadius: br,
-      child: this.child,
-      clipBehavior: clipBehavior,
-    );
+    final child = clipBehavior == Clip.none
+        ? this.child
+        : ClipRRect(
+            borderRadius: br,
+            child: this.child,
+            clipBehavior: clipBehavior,
+          );
 
     if (duration == null || duration == Duration.zero) {
       return Container(
