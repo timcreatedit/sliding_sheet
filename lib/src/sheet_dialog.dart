@@ -88,6 +88,7 @@ Future<T?> showSlidingBottomSheet<T>(
               liftOnScrollHeaderElevation: dialog.liftOnScrollHeaderElevation,
               liftOnScrollFooterElevation: dialog.liftOnScrollFooterElevation,
               body: null,
+              clipBehavior: dialog.clipBehavior,
             );
 
             if (parentBuilder != null) {
@@ -201,6 +202,9 @@ class SlidingSheetDialog {
   /// {@macro sliding_sheet.liftOnScrollFooterElevation}
   final double liftOnScrollFooterElevation;
 
+  /// {@macro sliding_sheet.clipBehavior}
+  final Clip clipBehavior;
+
   /// Creates a wrapper class to show a [SlidingSheet] as a bottom sheet dialog.
   const SlidingSheetDialog({
     this.builder,
@@ -232,6 +236,7 @@ class SlidingSheetDialog {
     this.extendBody = false,
     this.liftOnScrollHeaderElevation = 0.0,
     this.liftOnScrollFooterElevation = 0.0,
+    this.clipBehavior = Clip.antiAlias
   });
 }
 

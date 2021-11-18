@@ -12,6 +12,7 @@ import 'specs.dart';
 import 'util.dart';
 
 part 'scrolling.dart';
+
 part 'sheet_dialog.dart';
 
 typedef SheetBuilder = Widget Function(BuildContext context, SheetState state);
@@ -235,6 +236,13 @@ class SlidingSheet extends StatefulWidget {
   /// {@endtemplate}
   final OnDismissPreventedCallback? onDismissPrevented;
 
+  /// {@template sliding_sheet.clipBehavior}
+  /// The [Clip] applied to the sheet and/or header.
+  ///
+  /// Defaults to [Clip.antiAlias].
+  /// {@endtemplate}
+  final Clip clipBehavior;
+
   /// Creates a sheet than can be dragged and scrolled in a single gesture to be
   /// placed inside you widget tree.
   ///
@@ -295,6 +303,7 @@ class SlidingSheet extends StatefulWidget {
     bool extendBody = false,
     double liftOnScrollHeaderElevation = 0.0,
     double liftOnScrollFooterElevation = 0.0,
+    Clip clipBehavior = Clip.antiAlias,
   }) : this._(
           key: key,
           builder: builder,
@@ -327,6 +336,7 @@ class SlidingSheet extends StatefulWidget {
           extendBody: extendBody,
           liftOnScrollHeaderElevation: liftOnScrollHeaderElevation,
           liftOnScrollFooterElevation: liftOnScrollFooterElevation,
+          clipBehavior: clipBehavior,
         );
 
   SlidingSheet._({
@@ -359,6 +369,7 @@ class SlidingSheet extends StatefulWidget {
     required this.extendBody,
     required this.liftOnScrollHeaderElevation,
     required this.liftOnScrollFooterElevation,
+    required this.clipBehavior,
     this.body,
     this.parallaxSpec,
     this.route,
@@ -386,6 +397,7 @@ class _SlidingSheetState extends State<SlidingSheet>
   final GlobalKey footerKey = GlobalKey();
 
   bool get hasHeader => widget.headerBuilder != null;
+
   bool get hasFooter => widget.footerBuilder != null;
 
   late List<double> snappings;
@@ -397,9 +409,11 @@ class _SlidingSheetState extends State<SlidingSheet>
 
   // Whether the dialog completed its initial fly in
   bool didCompleteInitialRoute = false;
+
   // Whether a dismiss was already triggered by the sheet itself
   // and thus further route pops can be safely ignored
   bool dismissUnderway = false;
+
   // Whether the drag on a delegating widget (such as the backdrop)
   // did start, when the sheet was not fully collapsed
   bool didStartDragWhenNotCollapsed = false;
@@ -411,6 +425,7 @@ class _SlidingSheetState extends State<SlidingSheet>
 
   // Whether the sheet has drawn its first frame.
   bool isLaidOut = false;
+
   // The total height of all sheet components.
   double get sheetHeight =>
       childHeight +
@@ -418,30 +433,43 @@ class _SlidingSheetState extends State<SlidingSheet>
       footerHeight +
       padding.vertical +
       borderHeight;
+
   // The maxiumum height that this sheet will cover.
   double get maxHeight => math.min(sheetHeight, availableHeight);
+
   bool get isScrollable => sheetHeight >= availableHeight;
 
   double get currentExtent =>
       (extent?.currentExtent ?? minExtent).clamp(0.0, 1.0);
+
   set currentExtent(double value) => extent?.currentExtent = value;
+
   double get headerExtent =>
       isLaidOut ? (headerHeight + (borderHeight / 2)) / availableHeight : 0.0;
+
   double get footerExtent =>
       isLaidOut ? (footerHeight + (borderHeight / 2)) / availableHeight : 0.0;
+
   double get headerFooterExtent => headerExtent + footerExtent;
+
   double get minExtent => snappings[isDialog ? 1 : 0].clamp(0.0, 1.0);
+
   double get maxExtent => snappings.last.clamp(0.0, 1.0);
+
   double get initialExtent => snapSpec.initialSnap != null
       ? _normalizeSnap(snapSpec.initialSnap!)
       : minExtent;
 
   bool get isDialog => widget.route != null;
+
   ScrollSpec get scrollSpec => widget.scrollSpec;
+
   SnapSpec get snapSpec => widget.snapSpec;
+
   SnapPositioning get snapPositioning => snapSpec.positioning;
 
   double get borderHeight => (widget.border?.top.width ?? 0) * 2;
+
   EdgeInsets get padding {
     final begin = widget.padding ?? const EdgeInsets.all(0);
 
@@ -976,6 +1004,7 @@ class _SlidingSheetState extends State<SlidingSheet>
                       customBorders: BorderRadius.vertical(
                         top: Radius.circular(cornerRadius!),
                       ),
+                      clipBehavior: widget.clipBehavior,
                       child: sheet,
                     ),
                   ),
@@ -1281,6 +1310,7 @@ class SheetState {
 
 class _InheritedSheetState extends InheritedWidget {
   final ValueNotifier<SheetState> state;
+
   const _InheritedSheetState(
     this.state,
     Widget child,

@@ -20,6 +20,8 @@ class SheetContainer extends StatelessWidget {
   final List<BoxShadow>? boxShadows;
   final AlignmentGeometry? alignment;
   final BoxConstraints? constraints;
+  final Clip clipBehavior;
+
   const SheetContainer({
     Key? key,
     this.duration,
@@ -35,6 +37,7 @@ class SheetContainer extends StatelessWidget {
     this.boxShadows,
     this.alignment,
     this.constraints,
+    this.clipBehavior = Clip.antiAlias,
   }) : super(key: key);
 
   @override
@@ -57,7 +60,11 @@ class SheetContainer extends StatelessWidget {
               : const []),
     );
 
-    final child = ClipRRect(borderRadius: br, child: this.child);
+    final child = ClipRRect(
+      borderRadius: br,
+      child: this.child,
+      clipBehavior: clipBehavior,
+    );
 
     if (duration == null || duration == Duration.zero) {
       return Container(
@@ -86,6 +93,7 @@ class ElevatedContainer extends StatelessWidget {
   final double elevation;
   final bool Function(SheetState state) elevateWhen;
   final Widget child;
+
   const ElevatedContainer({
     Key? key,
     required this.shadowColor,
