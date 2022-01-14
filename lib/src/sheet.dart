@@ -1026,21 +1026,33 @@ class _SlidingSheetState extends State<SlidingSheet>
             child: widget.customBuilder!(context, controller, state),
           );
         }
-
-        return SingleChildScrollView(
-          controller: controller,
-          physics: scrollSpec.physics,
-          padding: EdgeInsets.only(
-            top: !hasHeader ? padding.top : 0.0,
-            bottom: !hasFooter ? padding.bottom : 0.0,
-          ),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: widget.minHeight ?? 0.0),
-            child: SizeChangedLayoutNotifier(
-              key: childKey,
-              child: widget.builder!(context, state),
+        final p = EdgeInsets.only(
+          top: !hasHeader ? padding.top : 0.0,
+          bottom: !hasFooter ? padding.bottom : 0.0,
+        );
+        return Stack(
+          children: [
+            Positioned.fill(
+              child: Padding(
+                padding: p,
+                child: Container(
+                  color: widget.color ?? Theme.of(context).cardColor,
+                ),
+              ),
             ),
-          ),
+            SingleChildScrollView(
+              controller: controller,
+              physics: scrollSpec.physics,
+              padding: p,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: widget.minHeight ?? 0.0),
+                child: SizeChangedLayoutNotifier(
+                  key: childKey,
+                  child: widget.builder!(context, state),
+                ),
+              ),
+            ),
+          ],
         );
       }(),
     );
@@ -1060,8 +1072,7 @@ class _SlidingSheetState extends State<SlidingSheet>
       );
     }
 
-    return Container(
-        color: widget.color ?? Theme.of(context).cardColor, child: scrollView);
+    return scrollView;
   }
 
   Widget _buildBody() {
