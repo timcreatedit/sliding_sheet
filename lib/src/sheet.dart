@@ -12,7 +12,6 @@ import 'specs.dart';
 import 'util.dart';
 
 part 'scrolling.dart';
-
 part 'sheet_dialog.dart';
 
 typedef SheetBuilder = Widget Function(BuildContext context, SheetState state);
@@ -990,7 +989,7 @@ class _SlidingSheetState extends State<SlidingSheet>
                   child: FractionalTranslation(
                     translation: Offset(0, translation),
                     child: SheetContainer(
-                      color: widget.color ?? Theme.of(context).cardColor,
+                      color: Colors.transparent,
                       border: widget.border,
                       margin: widget.margin,
                       padding: EdgeInsets.fromLTRB(
@@ -1061,7 +1060,8 @@ class _SlidingSheetState extends State<SlidingSheet>
       );
     }
 
-    return scrollView;
+    return Container(
+        color: widget.color ?? Theme.of(context).cardColor, child: scrollView);
   }
 
   Widget _buildBody() {
@@ -1137,7 +1137,7 @@ class _SlidingSheetState extends State<SlidingSheet>
             ? _pop(0.0)
             : _onDismissPrevented(backDrop: true);
 
-        // see: https://github.com/BendixMa/sliding-sheet/issues/30
+        // see: https://github.com/BendixMa/sliding-sheets/issues/30
         if (opacity >= 0.05 || didStartDragWhenNotCollapsed) {
           if (widget.isBackdropInteractable) {
             return _delegateInteractions(backDrop,
